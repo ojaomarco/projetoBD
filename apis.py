@@ -1,5 +1,7 @@
+from bs4 import BeautifulSoup
 import requests
 import json 
+from os import linesep
 
 class Tradutor:
     
@@ -24,3 +26,27 @@ class Tradutor:
         return str(translated['data']['translations'][0]['translatedText'])
                 
 
+class Noticies:
+    def __init__(self): 
+        url = 'http://g1.com.br/'
+        req = requests.get(url)
+        html = req.text
+
+        soup = BeautifulSoup(html,'html.parser')
+        self.colecao = soup.find_all(class_="feed-post-link gui-color-primary gui-color-hover")
+    #retorna as principais noticias do G1 e seus links
+    def getNoticias(self):
+        mensagem = ""
+        string = None
+        for i in self.colecao:
+            mensagem += "<b>"+ str(i.get_text()) + "</b>\n"
+            mensagem += i.get('href') + "\n\n"
+        
+        return mensagem 
+            
+            
+            
+    
+
+
+    

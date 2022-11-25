@@ -49,8 +49,8 @@ class TelegramBot:
         mensagem=str(mensagem['message']['text'])
 
         if eh_primeira or mensagem=='/menu':
-            return f'''Bem vindo ao nosso Bot!{os.linesep}Lista de Comandos:{os.linesep}Ver foto do Vinicius: 1{os.linesep}Traduzir do Inglês para o pt: /tren{os.linesep}
-        Traduzir do Port para o Inglês /trpt'''
+            return f'''**Bem vindo ao nosso Bot!**{os.linesep}Lista de Comandos:{os.linesep}Ver foto do Vinicius: 1{os.linesep}Traduzir do Inglês para o pt: /tren{os.linesep}
+        Traduzir do Port para o Inglês /trpt {os.linesep}Top notícias do g1 /noticias'''
       
         #Envia foto
         if mensagem == '1':
@@ -76,8 +76,14 @@ class TelegramBot:
             
         #traduz do port para o ingles            
         if mensagem.startswith("/trpt"):    
-            temp= mensagem.removeprefix("/trpt    ")
+            temp= mensagem.removeprefix("/trpt ")
             return str(tradutor.tr_to_pt(temp))
+        
+        #mostra top noticias do g1
+        if mensagem =='/noticias':
+            noticia = Noticies()
+            return noticia.getNoticias()
+           
         
         return "Comando inválido, digite /menu para ver os comandos."
     
