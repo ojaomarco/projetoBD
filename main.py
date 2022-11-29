@@ -4,15 +4,6 @@ import json
 import os
 from apis import *
 
-class Clima():
-    def __init__(self, cidade):
-        self.url = f'https://api.openweathermap.org/data/2.5/weather?q={cidade},BR&lang=pt_br&units=metric&appid=37a9c005072920a30e4531b4991ab462'
-    
-    #busca clima pela cidade
-    def buscar(self):
-        clima = requests.get(self.url).json()
-        return str(clima['main']['temp'])   
-
 class TelegramBot:
 
     def __init__(self):
@@ -49,8 +40,12 @@ class TelegramBot:
         mensagem=str(mensagem['message']['text'])
 
         if eh_primeira or mensagem=='/menu':
-            return f'''**Bem vindo ao nosso Bot!**{os.linesep}Lista de Comandos:{os.linesep}Ver foto do Vinicius: 1{os.linesep}Traduzir do Inglês para o pt: /tren{os.linesep}
-        Traduzir do Port para o Inglês /trpt {os.linesep}Top notícias do g1 /noticias'''
+            return f'''\U00002744*Bem vindo ao nosso Bot!*\U00002744{os.linesep}
+Lista de Comandos:
+Ver foto do Vinicius: 1
+Traduzir do Inglês para o pt: /tren
+Traduzir do Port para o Inglês /trpt
+Top notícias do g1 /noticias '''
       
         #Envia foto
         if mensagem == '1':
@@ -79,12 +74,13 @@ class TelegramBot:
             temp= mensagem.removeprefix("/trpt ")
             return str(tradutor.tr_to_pt(temp))
         
-        #mostra top noticias do g1
-        if mensagem =='/noticias':
-            noticia = Noticies()
-            return noticia.getNoticias()
-           
-        
+        #mostra top noticias do g1   
+        if mensagem == '/noticia':
+            lista = Noticies().get_noticias_sep()
+            for n in lista:
+                self.responder(n,chat_id)
+            
+            
         return "Comando inválido, digite /menu para ver os comandos."
     
     #envia mensagem                
@@ -99,6 +95,7 @@ class TelegramBot:
         url = f'https://api.telegram.org/bot{TOKEN}/sendPhoto?chat_id={chat_id}'
         print(requests.post(url, files={'photo': img}))
 
+        
     
 
 bot = TelegramBot()
